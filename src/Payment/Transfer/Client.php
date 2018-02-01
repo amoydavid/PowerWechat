@@ -11,6 +11,7 @@
 
 namespace PowerWeChat\Payment\Transfer;
 
+use PowerWeChat\Kernel\Exceptions\InvalidConfigException;
 use PowerWeChat\Kernel\Exceptions\RuntimeException;
 use PowerWeChat\Payment\Kernel\BaseClient;
 use function PowerWeChat\Kernel\Support\get_server_ip;
@@ -105,11 +106,61 @@ class Client extends BaseClient
             }
         }
 
-        $publicKey = file_get_contents($this->app['config']->get('rsa_public_key_path'));
+        if($this->app['config']->get('auto_download_rsa_public_key') && $this->app['config']->get('rsa_public_key_dir')) {
+            $publicKey = $this->autoGetRsaPemContent();
+        } else {
+            $publicKey = file_get_contents($this->app['config']->get('rsa_public_key_path'));
+        }
+
 
         $params['enc_bank_no'] = rsa_public_encrypt($params['enc_bank_no'], $publicKey);
         $params['enc_true_name'] = rsa_public_encrypt($params['enc_true_name'], $publicKey);
 
         return $this->safeRequest('mmpaysptrans/pay_bank', $params);
+    }
+
+
+    /**
+     * @return bool|string
+     * @throws InvalidConfigException
+     */
+    private function autoGetRsaPemContent()
+    {
+        if(!($this->app['config']->get('auto_download_rsa_public_key') && $this->app['config']->get('rsa_public_key_dir'))) {
+            return '';
+        }
+        $dir = $this->app['config']->get('rsa_public_key_dir');
+        $file_path = $dir .'/'.$this->app['config']->get('app_id').'.public_key.pem';
+        if(!file_exists($file_path)) {
+            $fileDir = dirname($file_path);
+            if (!is_dir($fileDir)) {
+                mkdir($fileDir, 0777, true);
+            }
+            $result = $this->publicKey();
+            if($result['return_code'] != 'SUCCESS' || $result['result_code']!='SUCCESS') {
+                throw new InvalidConfigException('获得证书出错'.$result['return_msg'], 999999);
+            }
+            file_put_contents($file_path, $result['pub_key']);
+        }
+        if(file_exists($file_path)) {
+            return file_get_contents($file_path);
+        } else {
+            return '';
+        }
+    }
+
+
+    /**
+     * find a client public key
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     * @throws InvalidConfigException
+     */
+    public function publicKey()
+    {
+        $params = [
+            'mch_id'=>$this->app['config']->mch_id
+        ];
+
+        return $this->safeRequest('https://fraud.mch.weixin.qq.com/risk/getpublickey', $params);
     }
 }
