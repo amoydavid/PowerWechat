@@ -29,7 +29,7 @@
         "symfony/http-foundation": "^2.7|^3.0|^4.0",
         "symfony/psr-http-message-bridge": "^0.3|^1.0",
         "symfony/cache": "^3.3|^4.0",
-        "easywechat-composer/easywechat-composer": "^0.1"
+        "amoydavid/powerwechat-composer": "^0.1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.0",
