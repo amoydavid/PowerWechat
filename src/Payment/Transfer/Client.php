@@ -130,20 +130,26 @@ class Client extends BaseClient
             return '';
         }
         $dir = $this->app['config']->get('rsa_public_key_dir');
-        $file_path = $dir .'/'.$this->app['config']->get('app_id').'.public_key.pem';
-        if(!file_exists($file_path)) {
-            $fileDir = dirname($file_path);
-            if (!is_dir($fileDir)) {
-                mkdir($fileDir, 0777, true);
+        $file_path = $dir .'/mch.'.$this->app['config']->get('app_id').'.public.pem';
+        $crt_path = $dir.'/mch.'.$this->app['config']->get('app_id').'.public.crt';
+        if(!file_exists($crt_path)) {
+            if(!file_exists($file_path)) {
+                $fileDir = dirname($file_path);
+                if (!is_dir($fileDir)) {
+                    mkdir($fileDir, 0777, true);
+                }
+                $result = $this->publicKey();
+                if($result['return_code'] != 'SUCCESS' || $result['result_code']!='SUCCESS') {
+                    throw new InvalidConfigException('获得证书出错'.$result['return_msg'], 999999);
+                }
+                file_put_contents($file_path, $result['pub_key']);
             }
-            $result = $this->publicKey();
-            if($result['return_code'] != 'SUCCESS' || $result['result_code']!='SUCCESS') {
-                throw new InvalidConfigException('获得证书出错'.$result['return_msg'], 999999);
-            }
-            file_put_contents($file_path, $result['pub_key']);
+            @shell_exec('openssl rsa -RSAPublicKey_in -in '.$file_path.' -pubout -out '.$crt_path);
         }
-        if(file_exists($file_path)) {
-            return file_get_contents($file_path);
+
+
+        if(file_exists($crt_path)) {
+            return file_get_contents($crt_path);
         } else {
             return '';
         }
