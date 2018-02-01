@@ -11,7 +11,7 @@
 
 namespace PowerWeChat\Kernel;
 
-use EasyWeChatComposer\Extension;
+use PowerWeChatComposer\Extension;
 use GuzzleHttp\Client;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\HandlerInterface;
