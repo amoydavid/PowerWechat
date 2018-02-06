@@ -24,7 +24,7 @@ class Client extends BaseClient
     /**
      * Query redpack.
      *
-     * @param mixed $params
+     * @param mixed $mchBillno
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
      *
