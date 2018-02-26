@@ -102,6 +102,25 @@ class Client extends BaseClient
         return $this->httpPostJson('wxa/release');
     }
 
+
+    /**
+     * 回滚
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function revert()
+    {
+        return $this->httpGet('wxa/revertcoderelease');
+    }
+
+     /**
+      * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+      */
+     public function undoCodeAudit()
+     {
+         return $this->httpGet('wxa/undocodeaudit');
+     }
+
     /**
      * @param string $action
      *
