@@ -11,6 +11,8 @@
 
 namespace PowerWeChat\Payment\Kernel;
 
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use PowerWeChat\Kernel\Support;
 use PowerWeChat\Kernel\Traits\HasHttpRequests;
 use PowerWeChat\Payment\Application;
@@ -67,6 +69,10 @@ class BaseClient
      */
     protected function request(string $endpoint, array $params = [], $method = 'post', array $options = [], $returnResponse = false)
     {
+        if (empty($this->middlewares)) {
+            $this->registerHttpMiddlewares();
+        }
+        
         $base = [
             'mch_id' => $this->app['config']['mch_id'],
             'nonce_str' => uniqid(),
@@ -85,6 +91,29 @@ class BaseClient
 
         return $returnResponse ? $response : $this->castResponseToType($response, $this->app->config->get('response_type'));
     }
+
+
+    /**
+     * Register Guzzle middlewares.
+     */
+    protected function registerHttpMiddlewares()
+    {
+        $this->pushMiddleware($this->logMiddleware(), 'log');
+    }
+
+
+    /**
+     * Log the request.
+     *
+     * @return \Closure
+     */
+    protected function logMiddleware()
+    {
+        $formatter = new MessageFormatter($this->app['config']['http.log_template'] ?? MessageFormatter::DEBUG);
+
+        return Middleware::log($this->app['logger'], $formatter);
+    }
+
 
     /**
      * Make a request and return raw response.
