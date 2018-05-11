@@ -33,6 +33,7 @@ use PowerWeChat\OpenPlatform\Authorizer\Server\Guard;
  * @method mixed setAuthorizerOption(string $appId, string $name, string $value)
  * @method mixed getAuthorizers(int $offset = 0, int $count = 500)
  * @method mixed createPreAuthorizationCode()
+ * @method mixed clearQuota()
  */
 class Application extends ServiceContainer
 {

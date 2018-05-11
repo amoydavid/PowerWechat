@@ -126,4 +126,18 @@ class Client extends BaseClient
 
         return $this->httpPostJson('cgi-bin/component/api_create_preauthcode', $params);
     }
+
+
+    /**
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function clearQuota()
+    {
+        $params = [
+            'component_appid' => $this->app['config']['app_id'],
+        ];
+
+        return $this->httpPostJson('cgi-bin/component/clear_quota', $params);
+    }
 }
