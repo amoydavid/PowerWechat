@@ -129,13 +129,21 @@ class Application extends ServiceContainer
      */
     protected function getAuthorizerConfig(string $appId, string $refreshToken = null): array
     {
-        return [
+        $config = [
             'debug' => $this['config']->get('debug', false),
             'response_type' => $this['config']->get('response_type'),
             'log' => $this['config']->get('log', []),
             'app_id' => $appId,
             'refresh_token' => $refreshToken,
         ];
+
+        $http_config = $this['config']->get('http', []);
+
+        if($http_config) {
+            $config['http'] = $http_config;
+        }
+
+        return $config;
     }
 
     /**
