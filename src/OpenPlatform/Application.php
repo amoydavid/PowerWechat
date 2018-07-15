@@ -122,6 +122,7 @@ class Application extends ServiceContainer
     }
 
     /**
+     * 开放平台添加http实例配置
      * @param string      $appId
      * @param string|null $refreshToken
      *
