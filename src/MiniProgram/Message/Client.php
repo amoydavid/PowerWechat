@@ -42,7 +42,7 @@ class Client extends BaseClient
      */
     public function updatableMsg(string $activity_id, int $target_state, Array $template_info)
     {
-        return $this->httpPost('cgi-bin/message/wxopen/updatablemsg/send', [
+        return $this->httpPostJson('cgi-bin/message/wxopen/updatablemsg/send', [
             'activity_id' => $activity_id,
             'target_state' =>$target_state,
             'template_info' => $template_info
