@@ -22,6 +22,7 @@ use PowerWeChat\Kernel\ServiceContainer;
  * @property \PowerWeChat\BasicService\Media\Client  $media
  * @property \PowerWeChat\BasicService\QrCode\Client $qrcode
  * @property \PowerWeChat\BasicService\Url\Client    $url
+ * @property \PowerWeChat\BasicService\ContentSecurity\Client    $content_security
  */
 class Application extends ServiceContainer
 {
@@ -33,5 +34,6 @@ class Application extends ServiceContainer
         QrCode\ServiceProvider::class,
         Media\ServiceProvider::class,
         Url\ServiceProvider::class,
+        ContentSecurity\ServiceProvider::class,
     ];
 }
