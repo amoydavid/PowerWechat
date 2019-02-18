@@ -26,6 +26,7 @@ use PowerWeChat\OpenPlatform\Authorizer\Server\Guard;
  * @property \PowerWeChat\OpenPlatform\Server\Guard        $server
  * @property \PowerWeChat\OpenPlatform\Auth\AccessToken    $access_token
  * @property \PowerWeChat\OpenPlatform\CodeTemplate\Client $code_template
+ * @property \PowerWeChat\OpenPlatform\Component\Client    $component
  *
  * @method mixed handleAuthorize(string $authCode = null)
  * @method mixed getAuthorizer(string $appId)
@@ -45,6 +46,7 @@ class Application extends ServiceContainer
         Base\ServiceProvider::class,
         Server\ServiceProvider::class,
         CodeTemplate\ServiceProvider::class,
+        Component\ServiceProvider::class,
     ];
 
     /**
