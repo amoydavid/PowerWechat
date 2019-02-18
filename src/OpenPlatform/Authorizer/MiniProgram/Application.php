@@ -19,9 +19,10 @@ use PowerWeChat\OpenPlatform\Authorizer\Aggregate\AggregateServiceProvider;
  *
  * @author mingyoung <mingyoungcheung@gmail.com>
  *
- * @property \PowerWeChat\OpenPlatform\Authorizer\Aggregate\Account\Client   $account
  * @property \PowerWeChat\OpenPlatform\Authorizer\MiniProgram\Code\Client    $code
  * @property \PowerWeChat\OpenPlatform\Authorizer\MiniProgram\Domain\Client  $domain
+ * @property \PowerWeChat\OpenPlatform\Authorizer\MiniProgram\Account\Client  $account
+ * @property \PowerWeChat\OpenPlatform\Authorizer\MiniProgram\Setting\Client  $setting
  * @property \PowerWeChat\OpenPlatform\Authorizer\MiniProgram\Tester\Client  $tester
  */
 class Application extends MiniProgram
@@ -37,9 +38,10 @@ class Application extends MiniProgram
         parent::__construct($config, $prepends);
 
         $providers = [
-            AggregateServiceProvider::class,
             Code\ServiceProvider::class,
             Domain\ServiceProvider::class,
+            Account\ServiceProvider::class,
+            Setting\ServiceProvider::class,
             Tester\ServiceProvider::class,
         ];
 
