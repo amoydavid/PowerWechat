@@ -89,4 +89,13 @@ class Client extends BaseClient
 
         return $this->safeRequest('secapi/mch/submchmanage', $params, 'post', compact('query'));
     }
+
+    /**
+     * 绑定子商户 服务商给小微商户配置绑定关系
+     * @param array $params
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     */
+    public function addsubdevconfig(array $params){
+        return $this->safeRequest('secapi/mch/addsubdevconfig', $params, 'post', compact('query'));
+    }
 }

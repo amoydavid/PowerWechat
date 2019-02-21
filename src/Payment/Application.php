@@ -30,6 +30,7 @@ use PowerWeChat\OfficialAccount;
  * @property \PowerWeChat\BasicService\Url\Client           $url
  * @property \PowerWeChat\Payment\Transfer\Client           $transfer
  * @property \PowerWeChat\Payment\Security\Client           $security
+ * @property \PowerWeChat\Payment\Merchant\Client           $merchant
  * @property \PowerWeChat\OfficialAccount\Auth\AccessToken  $access_token
  *
  * @method mixed pay(array $attributes)
