@@ -8,16 +8,13 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
-
 namespace PowerWeChat\Payment\Kernel;
-
-use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Middleware;
 use PowerWeChat\Kernel\Support;
 use PowerWeChat\Kernel\Traits\HasHttpRequests;
 use PowerWeChat\Payment\Application;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use Psr\Http\Message\ResponseInterface;
-
 /**
  * Class BaseClient.
  *
@@ -53,7 +50,6 @@ class BaseClient
     {
         return [];
     }
-
     /**
      * Make a API request.
      *
@@ -66,42 +62,33 @@ class BaseClient
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     protected function request(string $endpoint, array $params = [], $method = 'post', array $options = [], $returnResponse = false)
     {
-        if (empty($this->middlewares)) {
-            $this->registerHttpMiddlewares();
-        }
-        
         $base = [
             'mch_id' => $this->app['config']['mch_id'],
             'nonce_str' => uniqid(),
             'sub_mch_id' => $this->app['config']['sub_mch_id'],
             'sub_appid' => $this->app['config']['sub_appid'],
         ];
-
         $params = array_filter(array_merge($base, $this->prepends(), $params));
-
-        $params['sign'] = Support\generate_sign($params, $this->app->getKey($endpoint));
+        $secretKey = $this->app->getKey($endpoint);
+        if ('HMAC-SHA256' === ($params['sign_type'] ?? 'MD5')) {
+            $encryptMethod = function ($str) use ($secretKey) {
+                return hash_hmac('sha256', $str, $secretKey);
+            };
+        } else {
+            $encryptMethod = 'md5';
+        }
+        $params['sign'] = Support\generate_sign($params, $secretKey, $encryptMethod);
         $options = array_merge([
             'body' => Support\XML::build($params),
         ], $options);
-
+        $this->pushMiddleware($this->logMiddleware(), 'log');
         $response = $this->performRequest($endpoint, $method, $options);
-
         return $returnResponse ? $response : $this->castResponseToType($response, $this->app->config->get('response_type'));
     }
-
-
-    /**
-     * Register Guzzle middlewares.
-     */
-    protected function registerHttpMiddlewares()
-    {
-        $this->pushMiddleware($this->logMiddleware(), 'log');
-    }
-
-
     /**
      * Log the request.
      *
@@ -110,11 +97,8 @@ class BaseClient
     protected function logMiddleware()
     {
         $formatter = new MessageFormatter($this->app['config']['http.log_template'] ?? MessageFormatter::DEBUG);
-
         return Middleware::log($this->app['logger'], $formatter);
     }
-
-
     /**
      * Make a request and return raw response.
      *
@@ -126,6 +110,7 @@ class BaseClient
      * @return ResponseInterface
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     protected function requestRaw($endpoint, array $params = [], $method = 'post', array $options = [])
     {
@@ -143,6 +128,7 @@ class BaseClient
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     protected function safeRequest($endpoint, array $params, $method = 'post', array $options = [])
     {
