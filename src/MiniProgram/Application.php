@@ -25,6 +25,8 @@ use PowerWeChat\Kernel\ServiceContainer;
  * @property \PowerWeChat\MiniProgram\Auth\Client                 $auth
  * @property \PowerWeChat\OfficialAccount\Server\Guard            $server
  * @property \PowerWeChat\MiniProgram\Encryptor                   $encryptor
+ * @property \PowerWeChat\MiniProgram\Plugin\Client               $plugin
+ * @property \PowerWeChat\MiniProgram\Mall\Client                 $mall
  * @property \PowerWeChat\MiniProgram\TemplateMessage\Client      $template_message
  * @property \PowerWeChat\OfficialAccount\CustomerService\Client  $customer_service
  * @property \PowerWeChat\BasicService\Media\Client               $media
@@ -46,6 +48,8 @@ class Application extends ServiceContainer
         CustomerService\ServiceProvider::class,
         Message\ServiceProvider::class,
         UniformMessage\ServiceProvider::class,
+        Plugin\ServiceProvider::class,
+        Mall\ServiceProvider::class,
         // Base services
         BasicService\Media\ServiceProvider::class,
         BasicService\ContentSecurity\ServiceProvider::class,
