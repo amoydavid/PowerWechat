@@ -177,4 +177,27 @@ class Client extends BaseClient
             'num' => $num,
         ]);
     }
+
+    /**
+     * 查询服务商的当月提审限额和加急次数（Quota）
+     * 服务商可以调用该接口，查询当月平台分配的提审限额和剩余可提审次数，以及当月分配的审核加急次数和剩余加急次数。
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function queryQuota(){
+        return $this->httpGet('wxa/queryquota');
+    }
+
+    /**
+     * @param int $auditid
+     * 加急审核申请
+     * 有加急次数的第三方可以通过该接口，对已经提审的小程序进行加急操作，加急后的小程序预计2-12小时内审完。
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function speedUpAudit(int $auditid){
+        return $this->httpPost('wxa/speedupaudit',[
+            'auditid'=>$auditid
+        ]);
+    }
 }
