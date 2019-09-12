@@ -196,7 +196,7 @@ class Client extends BaseClient
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function speedUpAudit(int $auditid){
-        return $this->httpPost('wxa/speedupaudit',[
+        return $this->httpPostJson('wxa/speedupaudit',[
             'auditid'=>$auditid
         ]);
     }
