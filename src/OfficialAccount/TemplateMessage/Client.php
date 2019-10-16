@@ -146,6 +146,20 @@ class Client extends BaseClient
     }
 
     /**
+     * 发送订阅消息
+     * @param array $data
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     * @throws InvalidArgumentException
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function sendSubscriptionTemplate(array $data = [])
+    {
+        $params = $this->formatMessage($data);
+        $this->restoreMessage();
+        return $this->httpPostJson('cgi-bin/message/subscribe/send', $params);
+    }
+
+    /**
      * @param array $data
      *
      * @return array
