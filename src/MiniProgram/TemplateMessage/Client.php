@@ -11,6 +11,7 @@
 
 namespace PowerWeChat\MiniProgram\TemplateMessage;
 
+use PowerWeChat\Kernel\Exceptions\InvalidArgumentException;
 use PowerWeChat\OfficialAccount\TemplateMessage\Client as BaseClient;
 
 /**
@@ -95,5 +96,17 @@ class Client extends BaseClient
     public function getTemplates(int $offset, int $count)
     {
         return $this->httpPostJson('cgi-bin/wxopen/template/list', compact('offset', 'count'));
+    }
+
+    /**
+     * 发送订阅消息
+     * @param array $data
+     * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
+     * @throws InvalidArgumentException
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function sendSubscriptionTemplate(array $data = [])
+    {
+        return $this->httpPostJson('cgi-bin/message/subscribe/send', $data);
     }
 }

@@ -154,9 +154,7 @@ class Client extends BaseClient
      */
     public function sendSubscriptionTemplate(array $data = [])
     {
-        $params = $this->formatMessage($data);
-        $this->restoreMessage();
-        return $this->httpPostJson('cgi-bin/message/subscribe/send', $params);
+        return $this->httpPostJson('cgi-bin/message/subscribe/send', $data);
     }
 
     /**
