@@ -29,11 +29,11 @@ class Client extends BaseClient
 
     /**
      * 发送模板消息
-     * @param array $data
+     * @param $data
      * @return array|object|\PowerWeChat\Kernel\Support\Collection|ResponseInterface|string
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
-    public function send(array $data = [])
+    public function send($data = [])
     {
         $params = $this->formatMessage($data);
         $this->restoreMessage();
@@ -91,7 +91,7 @@ class Client extends BaseClient
      * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
-    public function addTemplate($tid, $kidList, $sceneDesc)
+    public function addNewTemplate($tid, $kidList, $sceneDesc)
     {
         return $this->httpPostJson('wxaapi/newtmpl/addtemplate', compact('tid', 'kidList', 'sceneDesc'));
     }
