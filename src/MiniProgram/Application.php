@@ -35,6 +35,7 @@ use PowerWeChat\Kernel\ServiceContainer;
  * @property \PowerWeChat\BasicService\ContentSecurity\Client     $content_security
  * @property \PowerWeChat\MiniProgram\UniformMessage\Client       $uniform_message
  * @property \PowerWeChat\MiniProgram\Business\Client             $business
+ * @property \PowerWeChat\MiniProgram\Express\Client              $express
  */
 class Application extends ServiceContainer
 {
@@ -53,6 +54,7 @@ class Application extends ServiceContainer
         UniformMessage\ServiceProvider::class,
         Plugin\ServiceProvider::class,
         Mall\ServiceProvider::class,
+        Express\ServiceProvider::class,
         // Base services
         BasicService\Media\ServiceProvider::class,
         BasicService\ContentSecurity\ServiceProvider::class,
