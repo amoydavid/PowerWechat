@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the amoydavid/powerwechat.
+ * This file is part of the overtrue/wechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -21,6 +21,9 @@ use Pimple\ServiceProviderInterface;
  */
 class ServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * @param Container $app
+     */
     public function register(Container $app)
     {
         $app['base'] = function ($app) {
