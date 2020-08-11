@@ -35,7 +35,7 @@ class AccessToken extends BaseAccessToken
     /**
      * @var string
      */
-    protected $cachePrefix = 'PowerWeChat.kernel.provider_access_token.';
+    protected $cachePrefix = 'easywechat.kernel.provider_access_token.';
 
     /**
      * Credential for get token.

@@ -69,7 +69,7 @@ class LogServiceProvider implements ServiceProviderInterface
                 'channels' => [
                     'single' => [
                         'driver' => 'single',
-                        'path' => $app['config']->get('log.file') ?: \sys_get_temp_dir().'/logs/PowerWeChat.log',
+                        'path' => $app['config']->get('log.file') ?: \sys_get_temp_dir().'/logs/easywechat.log',
                         'level' => $app['config']->get('log.level', 'debug'),
                     ],
                 ],
