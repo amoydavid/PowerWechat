@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -27,7 +27,6 @@ class Client extends BaseClient
      * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(string $cardId, string $encryptCode)
     {
@@ -45,7 +44,6 @@ class Client extends BaseClient
      * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function select(array $invoices)
     {
@@ -64,7 +62,6 @@ class Client extends BaseClient
      * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(string $cardId, string $encryptCode, string $status)
     {
@@ -85,7 +82,6 @@ class Client extends BaseClient
      * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function batchUpdate(array $invoices, string $openid, string $status)
     {

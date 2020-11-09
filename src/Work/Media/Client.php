@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -12,7 +12,6 @@
 namespace PowerWeChat\Work\Media;
 
 use PowerWeChat\Kernel\BaseClient;
-use PowerWeChat\Kernel\Http\StreamResponse;
 
 /**
  * Class Client.
@@ -26,24 +25,11 @@ class Client extends BaseClient
      *
      * @param string $mediaId
      *
-     * @return array|\PowerWeChat\Kernel\Http\Response|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return mixed
      */
     public function get(string $mediaId)
     {
-        $response = $this->requestRaw('cgi-bin/media/get', 'GET', [
-            'query' => [
-                'media_id' => $mediaId,
-            ],
-        ]);
-
-        if (false !== stripos($response->getHeaderLine('Content-Type'), 'text/plain')) {
-            return $this->castResponseToType($response, $this->app['config']->get('response_type'));
-        }
-
-        return StreamResponse::buildFromPsrResponse($response);
+        return $this->httpGet('cgi-bin/media/get', ['media_id' => $mediaId]);
     }
 
     /**
@@ -101,9 +87,6 @@ class Client extends BaseClient
      * @param string $path
      *
      * @return mixed
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function upload(string $type, string $path)
     {

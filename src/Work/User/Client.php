@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -12,7 +12,6 @@
 namespace PowerWeChat\Work\User;
 
 use PowerWeChat\Kernel\BaseClient;
-use PowerWeChat\Kernel\Exceptions\InvalidArgumentException;
 
 /**
  * Class Client.
@@ -27,9 +26,6 @@ class Client extends BaseClient
      * @param array $data
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(array $data)
     {
@@ -43,9 +39,6 @@ class Client extends BaseClient
      * @param array  $data
      *
      * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function update(string $id, array $data)
     {
@@ -58,9 +51,6 @@ class Client extends BaseClient
      * @param string|array $userId
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function delete($userId)
     {
@@ -77,13 +67,10 @@ class Client extends BaseClient
      * @param array $userIds
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function batchDelete(array $userIds)
     {
-        return $this->httpPostJson('cgi-bin/user/batchdelete', ['useridlist' => $userIds]);
+        return $this->httpPost('cgi-bin/user/batchdelete', ['useridlist' => $userIds]);
     }
 
     /**
@@ -92,8 +79,6 @@ class Client extends BaseClient
      * @param string $userId
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function get(string $userId)
     {
@@ -107,8 +92,6 @@ class Client extends BaseClient
      * @param bool $fetchChild
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function getDepartmentUsers(int $departmentId, bool $fetchChild = false)
     {
@@ -127,8 +110,6 @@ class Client extends BaseClient
      * @param bool $fetchChild
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function getDetailedDepartmentUsers(int $departmentId, bool $fetchChild = false)
     {
@@ -147,9 +128,6 @@ class Client extends BaseClient
      * @param int|null $agentId
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function userIdToOpenid(string $userId, int $agentId = null)
     {
@@ -167,9 +145,6 @@ class Client extends BaseClient
      * @param string $openid
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function openidToUserId(string $openid)
     {
@@ -181,30 +156,9 @@ class Client extends BaseClient
     }
 
     /**
-     * Convert mobile to userId.
-     *
-     * @param string $mobile
-     *
-     * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function mobileToUserId(string $mobile)
-    {
-        $params = [
-            'mobile' => $mobile,
-        ];
-
-        return $this->httpPostJson('cgi-bin/user/getuserid', $params);
-    }
-
-    /**
      * @param string $userId
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function accept(string $userId)
     {
@@ -213,39 +167,5 @@ class Client extends BaseClient
         ];
 
         return $this->httpGet('cgi-bin/user/authsucc', $params);
-    }
-
-    /**
-     * Batch invite users.
-     *
-     * @param array $params
-     *
-     * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function invite(array $params)
-    {
-        return $this->httpPostJson('cgi-bin/batch/invite', $params);
-    }
-
-    /**
-     * Get invitation QR code.
-     *
-     * @param int $sizeType
-     *
-     * @return array|\PowerWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     *
-     * @throws InvalidArgumentException
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     */
-    public function getInvitationQrCode(int $sizeType = 1)
-    {
-        if (!\in_array($sizeType, [1, 2, 3, 4], true)) {
-            throw new InvalidArgumentException('The sizeType must be 1, 2, 3, 4.');
-        }
-
-        return $this->httpGet('cgi-bin/corp/get_join_qrcode', ['size_type' => $sizeType]);
     }
 }

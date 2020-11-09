@@ -108,14 +108,4 @@ class Response extends GuzzleResponse
     {
         return $this->getBodyContents();
     }
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
-    protected function removeControlCharacters(string $content)
-    {
-        return \preg_replace('/[\x00-\x1F\x80-\x9F]/u', '', $content);
-    }
 }

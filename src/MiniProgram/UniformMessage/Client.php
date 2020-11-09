@@ -104,7 +104,7 @@ class Client extends BaseClient
      *
      * @return array
      *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     protected function baseFormat($data = [], $default = [])
     {

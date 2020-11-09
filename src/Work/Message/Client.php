@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -37,9 +37,6 @@ class Client extends BaseClient
      * @param array $message
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(array $message)
     {

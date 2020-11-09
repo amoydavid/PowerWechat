@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -24,8 +24,6 @@ class Client extends BaseClient
      * Get menu.
      *
      * @return mixed
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function get()
     {
@@ -38,9 +36,6 @@ class Client extends BaseClient
      * @param array $data
      *
      * @return mixed
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function create(array $data)
     {
@@ -51,8 +46,6 @@ class Client extends BaseClient
      * Delete menu.
      *
      * @return mixed
-     *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
      */
     public function delete()
     {

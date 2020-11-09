@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -179,8 +179,6 @@ class Messenger
             'agentid' => $this->agentId,
             'safe' => intval($this->secretive),
         ], $this->to));
-
-        $this->secretive = false;
 
         return $this->client->send($message);
     }

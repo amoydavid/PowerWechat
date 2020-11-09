@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -20,22 +20,14 @@ use PowerWeChat\Kernel\ServerGuard;
  */
 class Guard extends ServerGuard
 {
+    protected $alwaysValidate = true;
+
     /**
-     * @return $this
+     * @return bool
      */
     public function validate()
     {
         return $this;
-    }
-
-    /**
-     * Check the request message safe mode.
-     *
-     * @return bool
-     */
-    protected function isSafeMode(): bool
-    {
-        return true;
     }
 
     /**

@@ -20,8 +20,6 @@ namespace PowerWeChat;
  * @method static \PowerWeChat\OfficialAccount\Application    officialAccount(array $config)
  * @method static \PowerWeChat\BasicService\Application       basicService(array $config)
  * @method static \PowerWeChat\Work\Application               work(array $config)
- * @method static \PowerWeChat\OpenWork\Application           openWork(array $config)
- * @method static \PowerWeChat\MicroMerchant\Application      microMerchant(array $config)
  */
 class Factory
 {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the amoydavid/PowerWeChat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -22,7 +22,6 @@ use PowerWeChat\OfficialAccount;
  * Class Application.
  *
  * @property \PowerWeChat\Payment\Bill\Client               $bill
- * @property \PowerWeChat\Payment\Fundflow\Client          $fundflow
  * @property \PowerWeChat\Payment\Jssdk\Client              $jssdk
  * @property \PowerWeChat\Payment\Order\Client              $order
  * @property \PowerWeChat\Payment\Refund\Client             $refund
@@ -49,7 +48,6 @@ class Application extends ServiceContainer
         BasicService\Url\ServiceProvider::class,
         Base\ServiceProvider::class,
         Bill\ServiceProvider::class,
-        Fundflow\ServiceProvider::class,
         Coupon\ServiceProvider::class,
         Jssdk\ServiceProvider::class,
         Merchant\ServiceProvider::class,
@@ -175,24 +173,17 @@ class Application extends ServiceContainer
      *
      * @return string
      *
-     * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \PowerWechat\Kernel\Exceptions\InvalidArgumentException
      */
     public function getKey(string $endpoint = null)
     {
         if ('sandboxnew/pay/getsignkey' === $endpoint) {
             return $this['config']->key;
         }
-
         $key = $this->inSandbox() ? $this['sandbox']->getKey() : $this['config']->key;
-
-        if (empty($key)) {
-            throw new InvalidArgumentException('config key should not empty.');
-        }
-
         if (32 !== strlen($key)) {
             throw new InvalidArgumentException(sprintf("'%s' should be 32 chars length.", $key));
         }
-
         return $key;
     }
 

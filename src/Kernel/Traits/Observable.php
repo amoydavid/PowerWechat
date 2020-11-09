@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -11,7 +11,6 @@
 
 namespace PowerWeChat\Kernel\Traits;
 
-use PowerWeChat\Kernel\Clauses\Clause;
 use PowerWeChat\Kernel\Contracts\EventHandlerInterface;
 use PowerWeChat\Kernel\Decorators\FinallyResult;
 use PowerWeChat\Kernel\Decorators\TerminateResult;
@@ -31,18 +30,10 @@ trait Observable
     protected $handlers = [];
 
     /**
-     * @var array
-     */
-    protected $clauses = [];
-
-    /**
-     * @param \Closure|EventHandlerInterface|callable|string $handler
-     * @param \Closure|EventHandlerInterface|callable|string $condition
-     *
-     * @return \PowerWeChat\Kernel\Clauses\Clause
+     * @param \Closure|EventHandlerInterface|string $handler
+     * @param \Closure|EventHandlerInterface|string $condition
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function push($handler, $condition = '*')
     {
@@ -53,30 +44,13 @@ trait Observable
         }
 
         array_push($this->handlers[$condition], $handler);
-
-        return $this->newClause($handler);
-    }
-
-    /**
-     * @param array $handlers
-     *
-     * @return $this
-     */
-    public function setHandlers(array $handlers = [])
-    {
-        $this->handlers = $handlers;
-
-        return $this;
     }
 
     /**
      * @param \Closure|EventHandlerInterface|string $handler
      * @param \Closure|EventHandlerInterface|string $condition
      *
-     * @return \PowerWeChat\Kernel\Clauses\Clause
-     *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function unshift($handler, $condition = '*')
     {
@@ -87,36 +61,28 @@ trait Observable
         }
 
         array_unshift($this->handlers[$condition], $handler);
-
-        return $this->newClause($handler);
     }
 
     /**
      * @param string                                $condition
      * @param \Closure|EventHandlerInterface|string $handler
      *
-     * @return \PowerWeChat\Kernel\Clauses\Clause
-     *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function observe($condition, $handler)
     {
-        return $this->push($handler, $condition);
+        $this->push($handler, $condition);
     }
 
     /**
      * @param string                                $condition
      * @param \Closure|EventHandlerInterface|string $handler
      *
-     * @return \PowerWeChat\Kernel\Clauses\Clause
-     *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \ReflectionException
      */
     public function on($condition, $handler)
     {
-        return $this->push($handler, $condition);
+        $this->push($handler, $condition);
     }
 
     /**
@@ -143,12 +109,6 @@ trait Observable
         foreach ($this->handlers as $condition => $handlers) {
             if ('*' === $condition || ($condition & $event) === $event) {
                 foreach ($handlers as $handler) {
-                    if ($clause = $this->clauses[$this->getHandlerHash($handler)] ?? null) {
-                        if ($clause->intercepted($payload)) {
-                            continue;
-                        }
-                    }
-
                     $response = $this->callHandler($handler, $payload);
 
                     switch (true) {
@@ -177,36 +137,6 @@ trait Observable
     }
 
     /**
-     * @param mixed $handler
-     *
-     * @return \PowerWeChat\Kernel\Clauses\Clause
-     */
-    protected function newClause($handler): Clause
-    {
-        return $this->clauses[$this->getHandlerHash($handler)] = new Clause();
-    }
-
-    /**
-     * @param mixed $handler
-     *
-     * @return string
-     */
-    protected function getHandlerHash($handler)
-    {
-        if (is_string($handler)) {
-            return $handler;
-        }
-
-        if (is_array($handler)) {
-            return is_string($handler[0])
-                ? $handler[0].'::'.$handler[1]
-                : get_class($handler[0]).$handler[1];
-        }
-
-        return spl_object_hash($handler);
-    }
-
-    /**
      * @param callable $handler
      * @param mixed    $payload
      *
@@ -215,7 +145,7 @@ trait Observable
     protected function callHandler(callable $handler, $payload)
     {
         try {
-            return call_user_func_array($handler, [$payload]);
+            return $handler($payload);
         } catch (\Exception $e) {
             if (property_exists($this, 'app') && $this->app instanceof ServiceContainer) {
                 $this->app['logger']->error($e->getCode().': '.$e->getMessage(), [
@@ -229,12 +159,11 @@ trait Observable
     }
 
     /**
-     * @param mixed $handler
+     * @param $handler
      *
      * @return \Closure
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \ReflectionException
      */
     protected function makeClosure($handler)
     {
@@ -242,7 +171,7 @@ trait Observable
             return $handler;
         }
 
-        if (is_string($handler) && '*' !== $handler) {
+        if (is_string($handler)) {
             if (!class_exists($handler)) {
                 throw new InvalidArgumentException(sprintf('Class "%s" not exists.', $handler));
             }
@@ -266,13 +195,12 @@ trait Observable
     }
 
     /**
-     * @param mixed $handler
-     * @param mixed $condition
+     * @param $handler
+     * @param $condition
      *
      * @return array
      *
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidArgumentException
-     * @throws \ReflectionException
      */
     protected function resolveHandlerAndCondition($handler, $condition): array
     {

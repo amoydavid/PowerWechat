@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the overtrue/wechat.
+ * This file is part of the amoydavid/powerwechat.
  *
  * (c) overtrue <i@overtrue.me>
  *
@@ -84,18 +84,14 @@ trait HasHttpRequests
     }
 
     /**
-     * Return GuzzleHttp\ClientInterface instance.
+     * Return GuzzleHttp\Client instance.
      *
-     * @return ClientInterface
+     * @return \GuzzleHttp\Client
      */
-    public function getHttpClient(): ClientInterface
+    public function getHttpClient(): Client
     {
         if (!($this->httpClient instanceof ClientInterface)) {
-            if (property_exists($this, 'app') && $this->app['http_client']) {
-                $this->httpClient = $this->app['http_client'];
-            } else {
-                $this->httpClient = new Client(['handler' => HandlerStack::create($this->getGuzzleHandler())]);
-            }
+            $this->httpClient = new Client();
         }
 
         return $this->httpClient;
@@ -104,8 +100,8 @@ trait HasHttpRequests
     /**
      * Add a middleware.
      *
-     * @param callable $middleware
-     * @param string   $name
+     * @param callable    $middleware
+     * @param null|string $name
      *
      * @return $this
      */
@@ -137,9 +133,7 @@ trait HasHttpRequests
      * @param string $method
      * @param array  $options
      *
-     * @return \Psr\Http\Message\ResponseInterface
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
      */
     public function request($url, $method = 'GET', $options = []): ResponseInterface
     {
@@ -182,7 +176,7 @@ trait HasHttpRequests
             return $this->handlerStack;
         }
 
-        $this->handlerStack = HandlerStack::create($this->getGuzzleHandler());
+        $this->handlerStack = HandlerStack::create();
 
         foreach ($this->middlewares as $name => $middleware) {
             $this->handlerStack->push($middleware, $name);
@@ -211,21 +205,5 @@ trait HasHttpRequests
         }
 
         return $options;
-    }
-
-    /**
-     * Get guzzle handler.
-     *
-     * @return callable
-     */
-    protected function getGuzzleHandler()
-    {
-        if (property_exists($this, 'app') && isset($this->app['guzzle_handler'])) {
-            return is_string($handler = $this->app->raw('guzzle_handler'))
-                ? new $handler()
-                : $handler;
-        }
-
-        return \GuzzleHttp\choose_handler();
     }
 }
