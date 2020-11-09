@@ -129,8 +129,8 @@ class Client extends BaseClient
             return '';
         }
         $dir = $this->app['config']->get('rsa_public_key_dir');
-        $file_path = $dir .'/mch.'.$this->app['config']->get('app_id').'.public.pem';
-        $crt_path = $dir.'/mch.'.$this->app['config']->get('app_id').'.public.crt';
+        $file_path = $dir .'/mch.'.$this->app['config']->get('mch_id').'.public.pem';
+        $crt_path = $dir.'/mch.'.$this->app['config']->get('mch_id').'.public.crt';
         if(!file_exists($crt_path)) {
             if(!file_exists($file_path)) {
                 $fileDir = dirname($file_path);
