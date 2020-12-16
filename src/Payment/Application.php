@@ -34,6 +34,7 @@ use PowerWeChat\OfficialAccount;
  * @property \PowerWeChat\Payment\Merchant\Client           $merchant
  * @property \PowerWeChat\Payment\ProfitSharing\Client      $profit_sharing
  * @property \PowerWeChat\OfficialAccount\Auth\AccessToken  $access_token
+ * @property \PowerWeChat\Payment\Marketing\Client          $marketing
  *
  * @method mixed pay(array $attributes)
  * @method mixed authCodeToOpenid(string $authCode)
@@ -59,6 +60,7 @@ class Application extends ServiceContainer
         Transfer\ServiceProvider::class,
         Security\ServiceProvider::class,
         ProfitSharing\ServiceProvider::class,
+        Marketing\ServiceProvider::class,
     ];
 
     /**
