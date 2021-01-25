@@ -143,6 +143,44 @@ class Client extends BaseClient
     }
 
     /**
+     * 绑定快递账号
+     * @param array $params
+     *
+     * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleExceptionn
+     */
+    public function bindExpress(array $params = []){
+        return $this->httpPostJson('cgi-bin/express/business/account/bind', $params);
+    }
+
+    /**
+     * 获取所有绑定的物流账号
+     * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     */
+    public function getAllAccount()
+    {
+        return $this->httpGet('cgi-bin/express/business/account/getall');
+    }
+
+    /**
+     * 模拟快递公司更新订单状态, 该接口只能用户测试
+     * @param array $params
+     *
+     * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
+     *
+     * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleExceptionn
+     */
+    public function testUpdateOrder(array $params = []){
+        return $this->httpPostJson('cgi-bin/express/business/test_update_order', $params);
+    }
+
+
+    /**
      * 第三方代商户发起开通即时配送权限
      * @return array|object|\PowerWeChat\Kernel\Support\Collection|\Psr\Http\Message\ResponseInterface|string
      * @throws \PowerWeChat\Kernel\Exceptions\InvalidConfigException
