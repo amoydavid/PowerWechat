@@ -16,6 +16,9 @@ Thanks!
 ```shell
 $ composer require "amoydavid/powerwechat" -vvv
 ```
+## Update
+
+目前已经可支持 composer2
 
 ## Usage
 
