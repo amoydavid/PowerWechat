@@ -78,9 +78,12 @@ class Client extends BaseClient
      *
      * @return \Psr\Http\Message\ResponseInterface|\PowerWeChat\Kernel\Support\Collection|array|object|string
      */
-    public function addTemplate($shortId)
+    public function addTemplate($shortId, $keyword_name_list=[])
     {
         $params = ['template_id_short' => $shortId];
+        if($keyword_name_list && !empty($keyword_name_list)){
+            $params['keyword_name_list'] = $keyword_name_list;
+        }
 
         return $this->httpPostJson('cgi-bin/template/api_add_template', $params);
     }
